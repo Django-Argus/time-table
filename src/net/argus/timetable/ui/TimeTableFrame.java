@@ -5,6 +5,8 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
+import net.argus.system.OS;
+
 public class TimeTableFrame extends JFrame implements KeyListener {
 
 	/**
@@ -27,7 +29,7 @@ public class TimeTableFrame extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_F11) {
+		if(e.getKeyCode() == KeyEvent.VK_F11 || (OS.currentOS() == OS.OSX && e.getKeyCode() == KeyEvent.VK_F && e.isControlDown())) {
 			if(fullscreen) {
 				getGraphicsConfiguration().getDevice().setFullScreenWindow(null);
 				fullscreen = false;
