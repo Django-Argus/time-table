@@ -69,7 +69,8 @@ public class GUI {
 		EVENT_RANGE_LABEL.setFont(TEXT_FONT);
 		
 		EVENT_PROGRESS_BAR.setPreferredSize(new Dimension(500, 50));
-		
+		EVENT_PROGRESS_BAR.setStringPainted(true);
+		EVENT_PROGRESS_BAR.setFont(TEXT_FONT);
 		
 		NEXT_EVENT_NAME_LABEL.setText(" Next Event: ");
 		NEXT_EVENT_NAME_LABEL.setHorizontalAlignment(0);
@@ -92,7 +93,7 @@ public class GUI {
 		MAIN_CENTER_TOP_PANEL.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		MAIN_CENTER_CENTER_BOTTOM_PANEL.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		MAIN_CENTER_BOTTOM_PANEL.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
+		MAIN_CENTER_CENTER_CENTER_PANEL.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		MAIN_CENTER_CENTER_PANEL.add(BorderLayout.CENTER, MAIN_CENTER_CENTER_CENTER_PANEL);
 		MAIN_CENTER_CENTER_PANEL.add(BorderLayout.SOUTH, MAIN_CENTER_CENTER_BOTTOM_PANEL);
@@ -132,12 +133,11 @@ public class GUI {
 	}
 	
 	public static void updateProressBar(TimeTable timeTable) {
-		if(timeTable.getCurrentEvent().equals(TimeTable.DEFAULT_EVENT))
-			EVENT_PROGRESS_BAR.setModel(new DefaultBoundedRangeModel(1, 0, 0, 1));
-		else
-			EVENT_PROGRESS_BAR.setModel(new DefaultBoundedRangeModel((int) (timeTable.getCurrentDate().getTime() / 1000), 0,
-					(int) (timeTable.getStartCurrentEvent().getTime() / 1000),
-					(int) (timeTable.getEndCurrentEvent().getTime() / 1000)));
+		EVENT_PROGRESS_BAR.setModel(new DefaultBoundedRangeModel((int) (timeTable.getCurrentDate().getTime() / 1000), 0,
+				(int) (timeTable.getStartCurrentEvent().getTime() / 1000),
+				(int) (timeTable.getEndCurrentEvent().getTime() / 1000)));
+		
+		EVENT_PROGRESS_BAR.setString(Float.toString((float) ((int) (EVENT_PROGRESS_BAR.getPercentComplete() * 10000) / 100f)) + " %");
 	}
 	
 	public static void updateNextEvent(TimeTable timeTable) {
@@ -150,11 +150,8 @@ public class GUI {
 	}
 	
 	public static void updateRangeEvent(TimeTable timeTable) {				
-		if(timeTable.getCurrentEvent().equals(TimeTable.DEFAULT_EVENT))
-			EVENT_RANGE_LABEL.setText("");
-		else
-			EVENT_RANGE_LABEL.setText(RANGE_DATE_FORMAT.format(timeTable.getStartCurrentEvent()) + " --> " + RANGE_DATE_FORMAT.format(timeTable.getEndCurrentEvent()));
-	}
+		EVENT_RANGE_LABEL.setText(RANGE_DATE_FORMAT.format(timeTable.getStartCurrentEvent()) + " --> " + RANGE_DATE_FORMAT.format(timeTable.getEndCurrentEvent()));
+}
 		
 	public static void update(TimeTable timeTable) {
 		updateDate(timeTable);
@@ -163,7 +160,7 @@ public class GUI {
 		updateProressBar(timeTable);
 		updateNextEvent(timeTable);
 		updateRangeEvent(timeTable);
-		
+
 		FRAME.repaint();
 	}
 	

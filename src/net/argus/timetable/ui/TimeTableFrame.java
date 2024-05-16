@@ -1,5 +1,6 @@
 package net.argus.timetable.ui;
 
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -20,7 +21,8 @@ public class TimeTableFrame extends JFrame implements KeyListener {
 		super("TimeTable");
 		
 		setDefaultCloseOperation(3);
-		setSize(1200, 800);
+		setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		setState(JFrame.MAXIMIZED_BOTH);
 		addKeyListener(this);
 	}
 

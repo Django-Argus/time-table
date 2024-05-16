@@ -111,10 +111,65 @@ public class TimeTable {
 		return e;
 	}
 	
+	public TimeTableEvent getPreviousTodayEvent() {
+		TimeTableWeek week = getCurrentWeek();
+		TimeTableEvent e = DEFAULT_EVENT;
+		Calendar min = Calendar.getInstance();
+		min.set(Calendar.HOUR_OF_DAY, 0);
+		min.set(Calendar.MINUTE, 0);
+		min.set(Calendar.SECOND, 0);
+		
+		Calendar date = Calendar.getInstance();
+		
+		for(TimeTableEvent event : events) {
+			if(event.equals(getCurrentEvent()))
+				continue;
+			
+			if(event.getWeek() != 0 && event.getWeek() != week.getId())
+				continue;
+			
+			if(date.get(Calendar.DAY_OF_WEEK) - 2 != event.getDay())
+				continue;
+			
+			Calendar temp = Calendar.getInstance();
+			temp.set(Calendar.HOUR_OF_DAY, event.getHour());
+			temp.set(Calendar.MINUTE, event.getMinute());
+			temp.set(Calendar.SECOND, 0);
+			
+			if(temp.after(date))
+				continue;
+			
+			
+			if(temp.after(min)) {
+				min = temp;
+				e = event;
+			}
+			
+		}
+		return e;
+	}
+	
 	public Date getStartCurrentEvent() {
-		TimeTableEvent event = getCurrentEvent();
-		if(event.equals(DEFAULT_EVENT))
-			return Date.from(Instant.now());
+		return getStartEvent(getCurrentEvent());
+	}
+	
+	public Date getEndCurrentEvent() {
+		return getEndEvent(getCurrentEvent());
+	}
+	
+	public Date getStartEvent(TimeTableEvent event) {
+		if(event.equals(DEFAULT_EVENT)) {
+			TimeTableEvent prev = getPreviousTodayEvent();
+			if(prev.equals(DEFAULT_EVENT)) {
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				return cal.getTime();				
+			}
+			
+			return getEndEvent(prev);
+		}
 		
 		Calendar temp = Calendar.getInstance();
 		temp.set(Calendar.HOUR_OF_DAY, event.getHour());
@@ -124,10 +179,19 @@ public class TimeTable {
 		return temp.getTime();
 	}
 	
-	public Date getEndCurrentEvent() {
-		TimeTableEvent event = getCurrentEvent();
-		if(event.equals(DEFAULT_EVENT))
-			return Date.from(Instant.now());
+	public Date getEndEvent(TimeTableEvent event) {
+		if(event.equals(DEFAULT_EVENT)) {
+			TimeTableEvent next = getNextTodayEvent();
+			if(next.equals(DEFAULT_EVENT)) {
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.HOUR_OF_DAY, 23);
+				cal.set(Calendar.MINUTE, 59);
+				cal.set(Calendar.SECOND, 59);
+				return cal.getTime();				
+			}
+			
+			return getStartEvent(next);
+		}
 		
 		Calendar temp = Calendar.getInstance();
 		temp.set(Calendar.HOUR_OF_DAY, event.getHour());
