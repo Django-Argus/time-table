@@ -11,6 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import net.argus.instance.CardinalProgram;
 import net.argus.instance.Program;
+import net.argus.system.InitializationSystem;
 import net.argus.timetable.ui.GUI;
 import net.argus.util.debug.Debug;
 import net.argus.util.debug.Info;
@@ -24,6 +25,7 @@ public class MainTimeTable extends CardinalProgram {
 	
 	@Override
 	public void main(String[] args) {
+		InitializationSystem.initSystem(args);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}catch(ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {e.printStackTrace();}

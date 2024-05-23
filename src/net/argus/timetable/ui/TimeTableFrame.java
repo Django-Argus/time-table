@@ -6,9 +6,10 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
+import net.argus.gui.CFrame;
 import net.argus.system.OS;
 
-public class TimeTableFrame extends JFrame implements KeyListener {
+public class TimeTableFrame extends CFrame implements KeyListener {
 
 	/**
 	 * 
@@ -24,6 +25,7 @@ public class TimeTableFrame extends JFrame implements KeyListener {
 		setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		setState(JFrame.MAXIMIZED_BOTH);
 		addKeyListener(this);
+		setFullscreenable(true);
 	}
 
 	@Override
