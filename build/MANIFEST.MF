@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Class-Path: .
+Main-Class: net.argus.installer.Main
+Launcher-Args: -name %name% -id 0xjar -log false -update false
+Launcher-Class-Path: %path%%name%.%suf%
+Main-Instance-Class: net.argus.timetable.MainTimeTable
+Main-Class: net.argus.system.ProgramLauncher

@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import net.argus.system.OS;
 import net.argus.timetable.TimeTable;
 import net.argus.timetable.TimeTableEvent;
 
@@ -53,11 +54,14 @@ public class GUI {
 
 	
 	public static final JProgressBar EVENT_PROGRESS_BAR = new JProgressBar();
+	public static final JLabel EVENT_PROGRESS_LABEL = new JLabel();
+
 	
 	public static void init() {		
 		MAIN_PANEL.setLayout(new BorderLayout());
 		MAIN_CENTER_PANEL.setLayout(new BorderLayout());
 		MAIN_CENTER_CENTER_PANEL.setLayout(new BorderLayout());
+		
 		
 		MAIN_RIGHT_PANEL.setLayout(new BoxLayout(MAIN_RIGHT_PANEL, BoxLayout.Y_AXIS));
 		
@@ -69,8 +73,12 @@ public class GUI {
 		EVENT_RANGE_LABEL.setFont(TEXT_FONT);
 		
 		EVENT_PROGRESS_BAR.setPreferredSize(new Dimension(500, 50));
-		EVENT_PROGRESS_BAR.setStringPainted(true);
 		EVENT_PROGRESS_BAR.setFont(TEXT_FONT);
+		
+		if(OS.currentOS() != OS.OSX)
+			EVENT_PROGRESS_BAR.setStringPainted(true);
+
+		EVENT_PROGRESS_LABEL.setFont(TEXT_FONT);
 		
 		NEXT_EVENT_NAME_LABEL.setText(" Next Event: ");
 		NEXT_EVENT_NAME_LABEL.setHorizontalAlignment(0);
@@ -82,6 +90,7 @@ public class GUI {
 		MAIN_CENTER_TOP_PANEL.add(EVENT_NAME_LABEL);
 		MAIN_CENTER_CENTER_CENTER_PANEL.add(COUNTDOWN_LABEL);
 		MAIN_CENTER_CENTER_BOTTOM_PANEL.add(EVENT_PROGRESS_BAR);
+		MAIN_CENTER_CENTER_BOTTOM_PANEL.add(EVENT_PROGRESS_LABEL);
 		
 		MAIN_RIGHT_PANEL.add(NEXT_EVENT_NAME_LABEL);
 		MAIN_RIGHT_PANEL.add(TODAY_NEXT_EVENT_NAME_LABEL);
@@ -137,7 +146,11 @@ public class GUI {
 				(int) (timeTable.getStartCurrentEvent().getTime() / 1000),
 				(int) (timeTable.getEndCurrentEvent().getTime() / 1000)));
 		
-		EVENT_PROGRESS_BAR.setString(Float.toString((float) ((int) (EVENT_PROGRESS_BAR.getPercentComplete() * 10000) / 100f)) + " %");
+		String text = Float.toString((float) ((int) (EVENT_PROGRESS_BAR.getPercentComplete() * 10000) / 100f)) + " %";
+		if(OS.currentOS() == OS.OSX)
+			EVENT_PROGRESS_LABEL.setText(text);
+		else
+			EVENT_PROGRESS_BAR.setString(text);
 	}
 	
 	public static void updateNextEvent(TimeTable timeTable) {
